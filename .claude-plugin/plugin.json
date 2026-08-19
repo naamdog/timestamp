@@ -1,0 +1,9 @@
+{
+  "name": "timestamp",
+  "version": "0.1.0",
+  "description": "Ends every reply with a small stamp box showing the time the reply was finished, in the user's own time zone - read from a script on their machine, never guessed by the model. For anyone with many chats open who needs to see at a glance when each one last moved. Activates automatically on every turn via a hook.",
+  "author": { "name": "Mike Naameh" },
+  "license": "MIT",
+  "category": "productivity",
+  "keywords": ["time", "timestamp", "timezone", "session", "orientation", "hooks"]
+}
