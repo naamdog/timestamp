@@ -8,7 +8,7 @@
 #   timestamp-now.ps1 -TextOnly       -> just the time text for now, no box
 #
 # <text> is the time text this script itself prints with -TextOnly, e.g.
-# "20:58  Wed 19 Aug 2026  UTC+7". The reminder hook captures it at the start
+# "20:58:12  Wed 19 Aug 2026  UTC+7". The reminder hook captures it at the start
 # of the turn and hands it back in the command it gives the model.
 
 param(
@@ -29,7 +29,7 @@ $sign = if ($off.TotalMinutes -lt 0) { '-' } else { '+' }
 $h = [Math]::Abs($off.Hours); $m = [Math]::Abs($off.Minutes)
 $zone = if ($m -eq 0) { "UTC$sign$h" } else { "UTC$sign$h`:$('{0:00}' -f $m)" }
 
-$nowText = $now.ToString('HH:mm') + "  " + $now.ToString('ddd d MMM yyyy', [System.Globalization.CultureInfo]::InvariantCulture) + "  " + $zone
+$nowText = $now.ToString('HH:mm:ss') + "  " + $now.ToString('ddd d MMM yyyy', [System.Globalization.CultureInfo]::InvariantCulture) + "  " + $zone
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 if ($TextOnly) { $nowText; exit 0 }

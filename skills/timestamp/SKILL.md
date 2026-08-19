@@ -12,26 +12,25 @@ description: Use on every reply, in every session, with no exceptions — ends e
 The model has no clock. Left to itself it will either leave the time off or, worse, make one up. So the time comes from a script on the user's machine, in the user's time zone, and the model's only job is to paste it — exactly — as the very last thing in the reply. A small closed box, same shape every time, so the eye finds it without reading:
 
 ```
-┌─────────────────────────────────────────┐
-│ STARTED   20:58  Wed 19 Aug 2026  UTC+7 │
-│ FINISHED  21:01  Wed 19 Aug 2026  UTC+7 │
-└─────────────────────────────────────────┘
+┌────────────────────────────────────────────┐
+│ STARTED   20:58:12  Wed 19 Aug 2026  UTC+7 │
+│ FINISHED  21:01:47  Wed 19 Aug 2026  UTC+7 │
+└────────────────────────────────────────────┘
 ```
 
-Two lines: when the turn started (the moment the user's message landed) and when you finished writing. The gap between them is how long the turn took, which is often the thing the reader actually wants to know.
+Two lines, to the second: when the turn started (the moment the user's message landed) and when you finished writing. The gap between them is how long the turn took, which is often the thing the reader actually wants to know.
 
 That is the whole skill. Everything below is about getting the time right and putting the box in the right place.
 
 ## Where the time comes from
 
-Two sources, and the hook tells you which to use:
-
-1. **No tools used this turn** — paste the *start-of-turn stamp* the hook gave you. You started writing the moment the prompt landed, so STARTED and FINISHED are the same to within a minute, and the stamp already shows both.
-2. **Any tool used this turn** — the turn may have run for minutes or hours. Run the stamp command the hook gave you **as your final tool call, immediately before writing the reply**, and paste its lines. The start time is already baked into that command (`-Start "…"` on Windows, a quoted argument on macOS/Linux), so the script draws STARTED from the hook's clock and FINISHED from the clock now. Do not edit the command.
+One source, every turn: **run the stamp command the hook gave you as your final tool call, immediately before writing the reply, and paste its lines.** That applies to every reply — a twenty-minute build and a one-line "yes" alike. The start time is already baked into that command (`-Start "…"` on Windows, a quoted argument on macOS/Linux): the hook read the clock the moment the user's message landed, and the script draws STARTED from that reading and FINISHED from the clock now. Do not edit the command.
 
 The command is always the same file: `hooks/timestamp-now.ps1` (Windows) or `hooks/timestamp-now.sh` (macOS/Linux) inside this plugin. The hook hands you the absolute path and the start time, so there is nothing to look up or type.
 
-**Never guess, estimate, adjust, or round a time.** Not "about 21:00", not "a few minutes after the start stamp", not a time converted in your head to another zone. If you cannot run the command, paste the start-of-turn stamp and say in one line that it is the start time. A stamp that might be wrong is worse than no stamp, because the reader will trust it.
+The hook also gives you a *start-of-turn stamp* (STARTED and FINISHED both set to the start). That is a fallback only — for the rare turn where you genuinely cannot run any tool. If you use it, add one plain line saying FINISHED is really the start time.
+
+**Never guess, estimate, adjust, or round a time.** Not "about 21:00", not "a few minutes after the start stamp", not a time converted in your head to another zone. A stamp that might be wrong is worse than no stamp, because the reader will trust it.
 
 ## The shape
 
@@ -61,9 +60,8 @@ If the value is not recognised the script falls back to the machine's zone rathe
 
 | Situation | What to paste |
 |---|---|
-| Conversational reply, no tools | The start-of-turn stamp from the hook (STARTED = FINISHED) |
-| Any tool call this turn | Run the stamp command last, unedited, paste its output |
-| Stamp command fails | Start-of-turn stamp + one line saying FINISHED is really the start time |
+| Any reply at all — long or one-line | Run the stamp command last, unedited, paste its output |
+| Tools genuinely unavailable this turn | Start-of-turn stamp + one line saying FINISHED is really the start time |
 | Other skills printed a run box | Stamp goes **below** the run box |
 | Purpose Box present | Answer → Purpose Box → run box → stamp |
 | A different zone is wanted | Set `TIMESTAMP_TZ`; never convert by hand |
@@ -73,7 +71,7 @@ If the value is not recognised the script falls back to the machine's zone rathe
 | Signal | What it means |
 |---|---|
 | The stamp time is not something a script printed this turn | You guessed. Run the command or use the start stamp. |
-| You used tools but pasted the start-of-turn stamp | FINISHED is minutes or hours wrong on a long turn. Run the command. |
+| You pasted the start-of-turn stamp because the reply was short | FINISHED is a guess. Run the command — it costs one call. |
 | You retyped the start time into the command | Risk of a typo in STARTED. Paste the command exactly as the hook gave it. |
 | The box edges do not meet | You edited the lines. Paste exactly what the script printed. |
 | The stamp is above the run box | Move it. It is the last thing in the reply. |
@@ -83,6 +81,7 @@ If the value is not recognised the script falls back to the machine's zone rathe
 ## Common mistakes
 
 - **Inventing a plausible time.** The most dangerous failure, because it looks right. The rule is absolute: the time comes from the script or it does not appear.
+- **Skipping the command on a short reply.** It feels like overkill for a one-liner, but that is exactly how STARTED and FINISHED end up identical when they were not. One call, every time.
 - **Running the command first, not last.** If you fetch the time at the start of a long turn, FINISHED is the start time wearing the wrong label. Make it the final tool call.
 - **Editing the start time in the command.** The hook already put it there from a real clock. Retyping it is the only way a wrong STARTED can get in.
 - **"Tidying" the box.** The script counted the characters. Any edit breaks the edges.

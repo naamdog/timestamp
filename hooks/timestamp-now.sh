@@ -8,12 +8,12 @@
 #   timestamp-now.sh --text         -> just the time text for now, no box
 #
 # <text> is the time text this script itself prints with --text, e.g.
-# "20:58  Wed 19 Aug 2026  UTC+7". The reminder hook captures it at the start
+# "20:58:12  Wed 19 Aug 2026  UTC+7". The reminder hook captures it at the start
 # of the turn and hands it back in the command it gives the model.
 
 if [ -n "$TIMESTAMP_TZ" ]; then export TZ="$TIMESTAMP_TZ"; fi
 
-hm=$(date '+%H:%M')
+hm=$(date '+%H:%M:%S')
 dmy=$(date '+%a %e %b %Y' | tr -s ' ')
 z=$(date '+%z')                       # e.g. +0700
 sign=$(printf '%s' "$z" | cut -c1)
