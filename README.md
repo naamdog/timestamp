@@ -1,10 +1,11 @@
 # Timestamp
 
-A Claude Code plugin that puts a small stamp at the bottom of every reply - the time Claude finished writing, in your own time zone - so you can see at a glance when any chat last moved.
+A Claude Code plugin that puts a small stamp at the bottom of every reply - when the turn started and when Claude finished writing, in your own time zone - so you can see at a glance when any chat last moved and how long the last turn took.
 
 ```
 ┌─────────────────────────────────────────┐
-│ FINISHED  20:58  Wed 19 Aug 2026  UTC+7 │
+│ STARTED   20:58  Wed 19 Aug 2026  UTC+7 │
+│ FINISHED  21:01  Wed 19 Aug 2026  UTC+7 │
 └─────────────────────────────────────────┘
 ```
 
@@ -12,10 +13,10 @@ A Claude Code plugin that puts a small stamp at the bottom of every reply - the 
 
 Ships a skill (`timestamp`) plus a `UserPromptSubmit` hook that fires on every turn. The important design choice: **the model never makes the time up.** It has no clock, so left alone it would either skip the time or guess. Instead, a tiny script on your machine prints the stamp, and Claude's only job is to paste it, exactly, as the last thing in the reply.
 
-- The hook gives Claude a stamp for the *start* of the turn and the exact command to fetch a fresh one.
-- If Claude answered without using any tools, the start time is the finish time to within a minute, so it pastes that.
-- If Claude used tools - a build that ran for twenty minutes, say - it runs the stamp command as its final step, right before writing, and pastes the real finish time.
-- The script draws the box and measures the padding itself, so the edges always line up. Claude does not reformat it.
+- The hook reads your clock when your message lands, gives Claude a stamp for the *start* of the turn, and the exact command to fetch the finish - with that start time already baked into the command.
+- If Claude answered without using any tools, start and finish are the same to within a minute, so it pastes the start stamp (both lines already filled in).
+- If Claude used tools - a build that ran for twenty minutes, say - it runs the stamp command as its final step, right before writing. The script draws STARTED from the hook's reading and FINISHED from the clock now. Claude never types a time.
+- The script draws the box and measures the padding itself, so the edges always line up. Claude does not reformat it, and it does not edit the command.
 - It runs on every reply, one-liners included. It sits at the very bottom - below the answer, below the Purpose Box if you use it, and below the shared run box that the other skills print. The stamp is the postmark; postmarks go last.
 - It never adds a row to the run box. The stamp itself is the evidence it ran.
 
@@ -30,7 +31,7 @@ An unrecognised value falls back to the machine's zone rather than breaking anyt
 
 ## Why it exists
 
-When you are running several chats at once, the question "when did this one last move?" comes up constantly, and the answer is nowhere on screen. A fixed little box in a fixed place answers it in one glance - and because the time comes from your machine, not the model's imagination, you can trust it.
+When you are running several chats at once, two questions come up constantly and the answers are nowhere on screen: "when did this one last move?" and "how long did that take?" A fixed little box in a fixed place answers both in one glance - and because the times come from your machine, not the model's imagination, you can trust them.
 
 ## Install
 
@@ -58,7 +59,7 @@ If you're on macOS or Linux, switch `hooks/hooks.json` over to the `.sh` script:
    "\"${CLAUDE_PLUGIN_ROOT}/hooks/timestamp-reminder.sh\""
    ```
 
-The reminder script works out its own location and hands Claude the matching `.sh` command, so nothing else needs changing. `hooks.json` can't hold comments, which is why this note lives here instead.
+The reminder script works out its own location and hands Claude the matching `.sh` command with the start time already in it, so nothing else needs changing. `hooks.json` can't hold comments, which is why this note lives here instead.
 
 ## Sits well with
 

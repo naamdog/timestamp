@@ -1,12 +1,14 @@
 {
   "name": "timestamp",
-  "description": "A postmark on every reply - the time Claude finished writing, in your own time zone, read from your machine and never guessed.",
-  "owner": { "name": "Mike Naameh" },
+  "description": "A postmark on every reply - when the turn started and when Claude finished writing, in your own time zone, read from your machine and never guessed.",
+  "owner": {
+    "name": "Mike Naameh"
+  },
   "plugins": [
     {
       "name": "timestamp",
       "source": "./",
-      "description": "Ends every reply with a small stamp box showing the time it was finished, in your own time zone - read from a script on your machine, never guessed by the model - activates automatically via a UserPromptSubmit hook."
+      "description": "Ends every reply with a small stamp box showing when the turn started and when it was finished, in your own time zone - read from a script on your machine, never guessed by the model - activates automatically via a UserPromptSubmit hook."
     }
   ]
 }
