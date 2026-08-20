@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "timestamp",
-      "source": "./",
+      "source": "./claude-code",
       "description": "Ends every reply with a small stamp box showing when the turn started and when it was finished, in your own time zone - read from a script on your machine, never guessed by the model - activates automatically via a UserPromptSubmit hook."
     }
   ]
