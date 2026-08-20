@@ -6,12 +6,19 @@
 # carries a 0-indexed invocationNum, and this script writes the start stamp only when
 # invocationNum is 0, doing nothing (a silent no-op) on every later step of the same turn.
 #
-# ASSUMPTION (not independently verified against the Antigravity binary, unlike
-# ${PLUGIN_ROOT} for Codex): this script expects the PreInvocation payload as JSON on
-# stdin, containing an "invocationNum" field, e.g. {"invocationNum":0}. If Antigravity's
-# actual contract differs (a CLI argument, an environment variable, a different field
-# name), update the $invocationNum extraction below to match - the guard logic itself
-# (act only when the count is 0) does not change.
+# PARTLY VERIFIED. Live-tested on Antigravity 20 August 2026: the plugin installs, the
+# hook fires, and the stamp box renders. That test did NOT prove the field name below.
+# This script expects the PreInvocation payload as JSON on stdin containing an
+# "invocationNum" field, e.g. {"invocationNum":0}. If that name is wrong the extraction
+# below falls back to 0, the guard never suppresses anything, and the start stamp is
+# rewritten on every firing - so the box still appears, but STARTED creeps forward and
+# ends up a second or two behind FINISHED however long the turn really took.
+#
+# TO CHECK: run one Antigravity turn that takes a minute or more. If STARTED and FINISHED
+# come out seconds apart, the field name is wrong - correct the $invocationNum extraction
+# below to match Antigravity's real contract (a different field name, a CLI argument, or
+# an environment variable). The guard logic itself - act only when the count is 0 - is
+# right either way and does not change.
 #
 # This script never prints the box itself and is never the thing the model pastes. It only
 # writes the plain start-of-turn time text to ".turn-start" next to this script, using the
