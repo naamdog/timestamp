@@ -7,11 +7,19 @@
   "plugins": [
     {
       "name": "timestamp",
-      "source": "./",
-      "description": "Ends every reply with a small stamp box showing when the turn started and when it was finished, in your own time zone - read from a script on your machine, never guessed by the model. Activates automatically via a UserPromptSubmit hook.",
+      "source": {
+        "type": "local",
+        "path": "./grok"
+      },
+      "description": "Ends every reply with a small stamp box showing when the turn started and when it was finished, in your own time zone - read from a script on your machine, never guessed by the model. Installs the skill, plus a one-time /timestamp-setup command that writes the always-on rules file.",
       "category": "productivity",
       "homepage": "https://github.com/naamdog/timestamp",
-      "keywords": ["timestamp", "timezone", "session", "orientation"]
+      "keywords": [
+        "timestamp",
+        "timezone",
+        "session",
+        "orientation"
+      ]
     }
   ]
 }

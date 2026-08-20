@@ -1,0 +1,19 @@
+{
+  "name": "timestamp",
+  "version": "0.4.0",
+  "description": "Ends every reply with a small stamp box showing when the turn started and when the reply was finished, to the second, in the user's own time zone - read from a script on their machine, never guessed by the model. For anyone with many chats open who needs to see at a glance when each one last moved and how long it took. Installs the skill, plus a one-time /timestamp-setup command that writes the always-on rules file.",
+  "author": {
+    "name": "Mike Naameh"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/naamdog/timestamp",
+  "repository": "https://github.com/naamdog/timestamp",
+  "keywords": [
+    "time",
+    "timestamp",
+    "timezone",
+    "session",
+    "orientation",
+    "hooks"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PreInvocation": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${PLUGIN_ROOT}/hooks/timestamp-preinvocation.ps1\""
+          }
+        ]
+      }
+    ]
+  }
+}

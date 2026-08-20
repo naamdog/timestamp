@@ -1,0 +1,11 @@
+{
+  "name": "timestamp",
+  "plugins": [
+    {
+      "name": "timestamp",
+      "source": { "source": "local", "path": "./plugins/timestamp" },
+      "policy": { "installation": "AVAILABLE" },
+      "category": "productivity"
+    }
+  ]
+}

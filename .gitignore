@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 .in_use/
+
+# runtime artifact written by the Antigravity PreInvocation guard
+.turn-start
