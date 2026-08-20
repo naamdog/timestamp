@@ -1,6 +1,6 @@
 # Timestamp
 
-A Claude Code plugin that puts a small stamp at the bottom of every reply - when the turn started and when Claude finished writing, in your own time zone - so you can see at a glance when any chat last moved and how long the last turn took, to the second.
+A plugin for Claude Code and Grok Build that puts a small stamp at the bottom of every reply - when the turn started and when the reply finished, in your own time zone - so you can see at a glance when any chat last moved and how long the last turn took, to the second.
 
 ```
 ┌────────────────────────────────────────────┐
@@ -11,12 +11,12 @@ A Claude Code plugin that puts a small stamp at the bottom of every reply - when
 
 ## What it does
 
-Ships a skill (`timestamp`) plus a `UserPromptSubmit` hook that fires on every turn. The important design choice: **the model never makes the time up.** It has no clock, so left alone it would either skip the time or guess. Instead, a tiny script on your machine prints the stamp, and Claude's only job is to paste it, exactly, as the last thing in the reply.
+Ships a skill (`timestamp`) plus a `UserPromptSubmit` hook that fires on every turn. The important design choice: **the model never makes the time up.** It has no clock, so left alone it would either skip the time or guess. Instead, a tiny script on your machine prints the stamp, and the model's only job is to paste it, exactly, as the last thing in the reply.
 
-- The hook reads your clock the moment your message lands and hands Claude the exact command to fetch the finish - with that start time already baked into the command.
-- On every reply - a twenty-minute build or a one-line "yes" - Claude runs that command as its final step, right before writing. The script draws STARTED from the hook's reading and FINISHED from the clock now, both to the second. Claude never types a time.
-- The only fallback is a turn where Claude genuinely cannot run a tool; then it pastes the start-of-turn stamp and says so in one line.
-- The script draws the box and measures the padding itself, so the edges always line up. Claude does not reformat it, and it does not edit the command.
+- The hook reads your clock the moment your message lands and hands the model the exact command to fetch the finish - with that start time already baked into the command.
+- On every reply - a twenty-minute build or a one-line "yes" - the model runs that command as its final step, right before writing. The script draws STARTED from the hook's reading and FINISHED from the clock now, both to the second. The model never types a time.
+- The only fallback is a turn where the model genuinely cannot run a tool; then it pastes the start-of-turn stamp and says so in one line.
+- The script draws the box and measures the padding itself, so the edges always line up. The model does not reformat it, and it does not edit the command.
 - It runs on every reply, one-liners included. It sits at the very bottom - below the answer, below the Purpose Box if you use it, and below the shared run box that the other skills print. The stamp is the postmark; postmarks go last.
 - It never adds a row to the run box. The stamp itself is the evidence it ran.
 
@@ -33,7 +33,23 @@ An unrecognised value falls back to the machine's zone rather than breaking anyt
 
 When you are running several chats at once, two questions come up constantly and the answers are nowhere on screen: "when did this one last move?" and "how long did that take?" A fixed little box in a fixed place answers both in one glance - and because the times come from your machine, not the model's imagination, you can trust them.
 
-## Install
+## Install for Grok Build
+
+```powershell
+grok plugin marketplace add naamdog/timestamp
+grok plugin install timestamp --trust
+```
+
+Or install it with the other naamdog Grok plugins from one marketplace:
+
+```powershell
+grok plugin marketplace add naamdog/grok-plugins
+grok plugin install timestamp --trust
+```
+
+Start a new Grok session so the skill and hook load. Manage it with `grok plugin list`, `grok plugin disable timestamp`, or `grok plugin uninstall timestamp`.
+
+## Install for Claude Code
 
 In any Claude Code session:
 
