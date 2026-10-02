@@ -67,13 +67,7 @@ The hook ships two versions of every script. Both emit the same JSON and the sam
 - `hooks/timestamp-reminder.ps1` + `hooks/timestamp-now.ps1` - Windows (PowerShell). Wired up in `hooks/hooks.json` by default.
 - `hooks/timestamp-reminder.sh` + `hooks/timestamp-now.sh` - macOS/Linux (POSIX `sh`).
 
-If you're on macOS or Linux, switch `hooks/hooks.json` over to the `.sh` script:
-
-1. Make them executable once (they're tracked with the executable bit set, but if that's ever lost): `chmod +x hooks/*.sh`
-2. Edit `hooks/hooks.json` and replace the PowerShell `command` value with:
-   ```
-   "\"${CLAUDE_PLUGIN_ROOT}/hooks/timestamp-reminder.sh\""
-   ```
+The Claude Code hook picks the right script by itself: when Windows PowerShell is available it runs the `.ps1`, otherwise it runs the `.sh` with `sh`. Nothing needs editing on macOS or Linux.
 
 The reminder script works out its own location and hands Claude the matching `.sh` command with the start time already in it, so nothing else needs changing. `hooks.json` can't hold comments, which is why this note lives here instead.
 

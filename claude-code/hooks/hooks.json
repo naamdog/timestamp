@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/hooks/timestamp-reminder.ps1\""
+            "command": "if command -v powershell.exe >/dev/null 2>&1; then powershell.exe -NoProfile -ExecutionPolicy Bypass -File \"${CLAUDE_PLUGIN_ROOT}/hooks/timestamp-reminder.ps1\"; else sh \"${CLAUDE_PLUGIN_ROOT}/hooks/timestamp-reminder.sh\"; fi"
           }
         ]
       }
